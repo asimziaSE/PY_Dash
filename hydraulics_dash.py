@@ -31,12 +31,14 @@ values = list(hyd_vals)
 values_df = pd.DataFrame(values)
 #DASHBOARD----------------------------------
 
-col1 = sg.Column([
+M901_col = sg.Column([
     [sg.Frame('M901_TSA_pH', [[sg.Text(hyd_vals[10], font=["Helvetica", 10], text_color="#000000", justification="left")]])]])
+TS_col = sg.Column([
+    [sg.Frame('TimeStamp', [[sg.Text(hyd_vals[1], font=["Helvetica", 10], text_color="#000000", justification="left")]])]])
 
 bg_layout = [sg.theme_text_color(), sg.theme_background_color(), [sg.Image(r'hyd3.png')]]
 
-layout = [[col1],
+layout = [[M901_col], [TS_col],
     [sg.Push(),sg.Text('Hydrovolta Hydraulics Subsystem',size=(40, 1), font=('Any 15')),sg.Push()],
     [sg.Image(size=(800,500),filename="hyd3.png")],
     [sg.Button('Exit')]
