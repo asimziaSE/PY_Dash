@@ -1,6 +1,18 @@
 import PySimpleGUI as sg
 import pandas as pd
 import pyodbc 
+
+global devId
+global ts
+global AI0
+global AI1
+global AI2
+global AI3
+global AI4
+global AI5
+global AI6
+global M901
+
 # Some other example server values are
 # server = 'localhost\sqlexpress' # for a named instance
 # server = 'myserver,port' # to specify an alternate port
@@ -29,14 +41,28 @@ M934_D2In_Flow, M936_C1In_Pressure, M937_C2Out_Conductivity, M938_C2Loop_Flow, M
 hyd_vals = cursor.fetchone()
 values = list(hyd_vals)
 values_df = pd.DataFrame(values)
+
+devId = hyd_vals[0]
+ts = hyd_vals[1]
+AI0 = hyd_vals[2]
+AI1 = hyd_vals[3]
+AI2 = hyd_vals[4]
+AI3 = hyd_vals[5]
+AI4 = hyd_vals[6]
+AI5 = hyd_vals[7]
+AI6 = hyd_vals[8]
+M901 = hyd_vals[9]
+
 #DASHBOARD----------------------------------
 
 M901_col = sg.Column([
-    [sg.Frame('M901_TSA_pH', [[sg.Text(hyd_vals[10], font=["Helvetica", 10], text_color="#000000", justification="left")]])]])
+    [sg.Frame('M901_TSA_pH', [[sg.Text(M901, font=["Helvetica", 10], text_color="#000000", justification="left")]])]])
 TS_col = sg.Column([
-    [sg.Frame('TimeStamp', [[sg.Text(hyd_vals[1], font=["Helvetica", 10], text_color="#000000", justification="left")]])]])
+    [sg.Frame('TimeStamp', [[sg.Text(ts, font=["Helvetica", 10], text_color="#000000", justification="left")]])]])
 
-bg_layout = [sg.theme_text_color(), sg.theme_background_color(), [sg.Image(r'hyd3.png')]]
+#bg_layout = [sg.theme_text_color(), sg.theme_background_color(), [sg.Image(r'hyd3.png')]]
+
+#s[[col1, col2], [col3]]
 
 layout = [[M901_col], [TS_col],
     [sg.Push(),sg.Text('Hydrovolta Hydraulics Subsystem',size=(40, 1), font=('Any 15')),sg.Push()],
