@@ -13,6 +13,7 @@ global AI5
 global AI6
 global M901
 
+counter=0
 # Some other example server values are
 # server = 'localhost\sqlexpress' # for a named instance
 # server = 'myserver,port' # to specify an alternate port
@@ -39,9 +40,9 @@ M926_TC_pressure_231, M927_TC_Flow, M928_TC_Cond, M930_Drain_Flow, M932_C1Loop_F
 M934_D2In_Flow, M936_C1In_Pressure, M937_C2Out_Conductivity, M938_C2Loop_Flow, M939_D3In_pressure, M942_C2In_pressure from [dbo].[demoTable] ORDER BY ts DESC""")
 
 hyd_vals = cursor.fetchone()
-values = list(hyd_vals)
-values_df = pd.DataFrame(values)
-
+###values = list(hyd_vals)
+###values_df = pd.DataFrame(values)
+##
 devId = hyd_vals[0]
 ts = hyd_vals[1]
 AI0 = hyd_vals[2]
@@ -56,9 +57,9 @@ M901 = hyd_vals[9]
 #DASHBOARD----------------------------------
 
 M901_col = sg.Column([
-    [sg.Frame('M901_TSA_pH', [[sg.Text(M901, font=["Helvetica", 10], text_color="#000000", justification="left")]])]])
+    [sg.Frame('M901_TSA_pH', [[sg.Text(M901, font=["Helvetica", 10], text_color="#00FF00", justification="left",key="-M901-")]])]])
 TS_col = sg.Column([
-    [sg.Frame('TimeStamp', [[sg.Text(ts, font=["Helvetica", 10], text_color="#000000", justification="left")]])]])
+    [sg.Frame('TimeStamp', [[sg.Text(ts, font=["Helvetica", 10], text_color="#00EE00", justification="left",key="-ts-")]])]])
 
 #bg_layout = [sg.theme_text_color(), sg.theme_background_color(), [sg.Image(r'hyd3.png')]]
 
@@ -71,12 +72,28 @@ layout = [[M901_col], [TS_col],
 ]
 
 window = sg.Window("Hydraulics Dash", layout).Finalize()
-window.Maximize()
+#window.Maximize()
 
 while True:
-    event, values = window.read()
+
+    event, values = window.read(timeout=1)
+    counter = counter+1
+    print(counter)
+    cursor.execute("select ts,M901_TSA_pH from [dbo].[demoTable] ORDER BY ts DESC")
+    foo = cursor.fetchone()
+    M901 = foo[1]
+    ts = foo[0]
+    print(ts)
+    print(M901)
+    
+    
+    window['-ts-'].Update(ts)
+    window['-M901-'].Update(M901)
+    window.refresh()
     if event == "Exit" or event == sg.WIN_CLOSED:
         break
+
+
 
 
 window.close()
