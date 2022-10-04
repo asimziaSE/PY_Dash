@@ -59,15 +59,16 @@ M901 = hyd_vals[9]
 M901_col = sg.Column([
     [sg.Frame('M901_TSA_pH', [[sg.Text(M901, font=["Helvetica", 10], text_color="#00FF00", justification="left",key="-M901-")]])]])
 TS_col = sg.Column([
-    [sg.Frame('TimeStamp', [[sg.Text(ts, font=["Helvetica", 10], text_color="#00EE00", justification="left",key="-ts-")]])]])
+    [sg.Frame('TimeStamp',[[sg.Text(ts, font=["Helvetica", 10], text_color="#00EE00", justification="left",key="-ts-")]])]])
 
 #bg_layout = [sg.theme_text_color(), sg.theme_background_color(), [sg.Image(r'hyd3.png')]]
 
 #s[[col1, col2], [col3]]
 
-layout = [[M901_col], [TS_col],
+layout = [
     [sg.Push(),sg.Text('Hydrovolta Hydraulics Subsystem',size=(40, 1), font=('Any 15')),sg.Push()],
     [sg.Image(size=(800,500),filename="hyd3.png")],
+    [M901_col], [TS_col],
     [sg.Button('Exit')]
 ]
 
