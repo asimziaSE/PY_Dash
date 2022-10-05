@@ -189,9 +189,6 @@ while True:
     M938 = hyd_vals[38]
     M939 = hyd_vals[39]
     M942 = hyd_vals[40]
-
-    #print(hyd_vals)
-    
     
     window['-ts-'].Update(ts)
     window['-M901-'].Update(M901)
@@ -203,10 +200,16 @@ while True:
     window['-M910-'].Update(M910)
     window['-M911-'].Update(M911)
     window['-M912-'].Update(M912)
+    window['-M912-'].Update(M913)
+    window['-M912-'].Update(M914)
+    window['-M912-'].Update(M915)
+    window['-M912-'].Update(M916)
+    window['-M912-'].Update(M917)
     window.refresh()
     if event == "Exit" or event == sg.WIN_CLOSED:
         break
 
+    
 
 
 
