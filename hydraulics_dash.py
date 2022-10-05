@@ -65,6 +65,9 @@ M901_col = sg.Column([
 M902_col = sg.Column([
     [sg.Frame('M902_TSA_pressure', [[sg.Text(M902, font=["Helvetica", 10], text_color="#00FF00", justification="left",key="-M902-")]])]])
 
+M903_col = sg.Column([
+    [sg.Frame('M903_TSA_Flow', [[sg.Text(M903, font=["Helvetica", 10], text_color="#00FF00", justification="left",key="-M903-")]])]])
+
 TS_col = sg.Column([
     [sg.Frame('TimeStamp',[[sg.Text(ts, font=["Helvetica", 10], text_color="#00EE00", justification="left",key="-ts-")]])]])
 
@@ -73,11 +76,11 @@ TS_col = sg.Column([
 layout = [
     [sg.Push(),sg.Text('Hydrovolta Hydraulics Subsystem',size=(40, 1), font=('Any 15')),sg.Push()],
     [sg.Image(size=(800,500),filename="hyd3.png")],
-    [[M901_col], [TS_col],M902_col],
+    [[M901_col, TS_col],[M902_col,M903_col]],
     [sg.Button('Exit')]
 ]
 
-window = sg.Window("Hydraulics Dash", layout).Finalize()
+window = sg.Window("Hydraulics Dash", layout,grab_anywhere=True).Finalize()
 window.Maximize()
 
 while True:
@@ -135,12 +138,13 @@ while True:
     M939 = hyd_vals[39]
     M942 = hyd_vals[40]
 
-    print(hyd_vals)
+    #print(hyd_vals)
     
     
     window['-ts-'].Update(ts)
     window['-M901-'].Update(M901)
     window['-M902-'].Update(M902)
+    window['-M903-'].Update(M903)
     window.refresh()
     if event == "Exit" or event == sg.WIN_CLOSED:
         break
