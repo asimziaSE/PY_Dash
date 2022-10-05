@@ -58,9 +58,12 @@ cursor = cnxn.cursor()
 
 #DASHBOARD----------------------------------
 
+#FRAMES
 
 M901_col = sg.Column([
-    [sg.Frame('M901_TSA_pH', [[sg.Text(M901, font=["Helvetica", 10], text_color="#00FF00", justification="left",key="-M901-")]])]])
+    [sg.Frame('M901_TSA_pH',[[sg.Text(M901, font=["Helvetica", 10], text_color="#00FF00", justification="left",key="-M901-")]])]])
+M901_btn = sg.Column([
+    [sg.Frame("M901 Graph", [[sg.Button('Graph')]], key="-M901_btn-", element_justification="center", size=(100, 100))]])
 
 M902_col = sg.Column([
     [sg.Frame('M902_TSA_pressure', [[sg.Text(M902, font=["Helvetica", 10], text_color="#00FF00", justification="left",key="-M902-")]])]])
@@ -68,31 +71,80 @@ M902_col = sg.Column([
 M903_col = sg.Column([
     [sg.Frame('M903_TSA_Flow', [[sg.Text(M903, font=["Helvetica", 10], text_color="#00FF00", justification="left",key="-M903-")]])]])
 
+M904_col = sg.Column([
+    [sg.Frame('M904_TSA_Cond', [[sg.Text(M904, font=["Helvetica", 10], text_color="#00FF00", justification="left",key="-M904-")]])]])
+
+M905_col = sg.Column([
+    [sg.Frame('M905_TSA_Level', [[sg.Text(M905, font=["Helvetica", 10], text_color="#00FF00", justification="left",key="-M905-")]])]])
+
+M908_col = sg.Column([
+    [sg.Frame('M908_TE_LEVEL', [[sg.Text(M908, font=["Helvetica", 10], text_color="#00FF00", justification="left",key="-M908-")]])]])
+
+M910_col = sg.Column([
+    [sg.Frame('M910_TD_Temperature', [[sg.Text(M910, font=["Helvetica", 10], text_color="#00FF00", justification="left",key="-M910-")]])]])
+
+M911_col = sg.Column([
+    [sg.Frame('M911_TSA_Temperature', [[sg.Text(M911, font=["Helvetica", 10], text_color="#00FF00", justification="left",key="-M911-")]])]])
+
+M912_col = sg.Column([
+    [sg.Frame('M912_TB_Temperature', [[sg.Text(M912, font=["Helvetica", 10], text_color="#00FF00", justification="left",key="-M912-")]])]])
+
+M913_col = sg.Column([
+    [sg.Frame('M913_E_G1_Pressure', [[sg.Text(M913, font=["Helvetica", 10], text_color="#00FF00", justification="left",key="-M913-")]])]])
+
+M914_col = sg.Column([
+    [sg.Frame('M914_E_G2_Pressure', [[sg.Text(M914, font=["Helvetica", 10], text_color="#00FF00", justification="left",key="-M914-")]])]])
+
+M915_col = sg.Column([
+    [sg.Frame('M915_TF_Cond_Pressure', [[sg.Text(M915, font=["Helvetica", 10], text_color="#00FF00", justification="left",key="-M915-")]])]])
+
+M916_col = sg.Column([
+    [sg.Frame('M916_TF_Cond_Pressure', [[sg.Text(M916, font=["Helvetica", 10], text_color="#00FF00", justification="left",key="-M916-")]])]])
+
+M917_col = sg.Column([
+    [sg.Frame('M917_TD_Level', [[sg.Text(M917, font=["Helvetica", 10], text_color="#00FF00", justification="left",key="-M917-")]])]])
+
+
 TS_col = sg.Column([
     [sg.Frame('TimeStamp',[[sg.Text(ts, font=["Helvetica", 10], text_color="#00EE00", justification="left",key="-ts-")]])]])
 
-#bg_layout = [sg.theme_text_color(), sg.theme_background_color(), [sg.Image(r'hyd3.png')]]
 
 layout = [
-    [sg.Push(),sg.Text('Hydrovolta Hydraulics Subsystem',size=(40, 1), font=('Any 15')),sg.Push()],
+    [[sg.Button('Exit')],sg.Text('Hydrovolta Hydraulics Subsystem',size=(40, 1), font=('Any 15')),sg.Push()],
     [sg.Image(size=(800,500),filename="hyd3.png")],
-    [[M901_col, TS_col],[M902_col,M903_col]],
-    [sg.Button('Exit')]
+    [[M901_col, TS_col,M902_col,M903_col,M904_col,M905_col,M908_col, M910_col, M911_col]],
+    [M912_col, M913_col, M914_col, M915_col, M916_col, M917_col],
+    [M901_btn]
+##    [[M901_col, TS_col],[M902_col,M903_col]],
+##    [M904_col,M905_col],
+    
 ]
+
+#WINDOW
 
 window = sg.Window("Hydraulics Dash", layout,grab_anywhere=True).Finalize()
 window.Maximize()
 
+#EVENT
+
 while True:
 
-    event, values = window.read(timeout=800)
-    cursor.execute("""select DeviceId, ts, [ADAM-4017+_1:AI0_100mV],[ADAM-4017+_1:AI1_100mV],[ADAM-4017+_1:AI2_100mV],[ADAM-4017+_1:AI3_100mV],
+    event, values = window.read(timeout=10)
+    
+
+    try:
+        
+        cursor.execute("""select DeviceId, ts, [ADAM-4017+_1:AI0_100mV],[ADAM-4017+_1:AI1_100mV],[ADAM-4017+_1:AI2_100mV],[ADAM-4017+_1:AI3_100mV],
                 [ADAM-4017+_1:AI4_100mV],[ADAM-4017+_1:AI5_100mV],[ADAM-4017+_1:AI6_100mV],
                 M901_TSA_pH, M902_TSA_pressure, M903_TSA_Flow, M904_TSA_Cond, M905_TSA_Level, M908_TE_LEVEL,
                 M910_TD_Temperature, M911_TSA_Temperature, M912_TB_Temperature, M913_E_G1_Pressure, M914_E_G2_Pressure, M915_TF_Cond,
                 M916_TF_pressure, M917_TD_Level, M918_TC_Level, M919_E_Conducitivity, M920_Drain_pressure, M921_TD_pH, M922_TD_pressure, M923_TD_Flow,
                 M926_TC_pressure_231, M927_TC_Flow, M928_TC_Cond, M930_Drain_Flow, M932_C1Loop_Flow, M933_D2In_pressure,
                 M934_D2In_Flow, M936_C1In_Pressure, M937_C2Out_Conductivity, M938_C2Loop_Flow, M939_D3In_pressure, M942_C2In_pressure from [dbo].[demoTable] ORDER BY ts DESC""")
+
+    except:
+
+        print("Read timeout")
 
     hyd_vals = cursor.fetchone()
     
@@ -145,6 +197,12 @@ while True:
     window['-M901-'].Update(M901)
     window['-M902-'].Update(M902)
     window['-M903-'].Update(M903)
+    window['-M904-'].Update(M904)
+    window['-M905-'].Update(M905)
+    window['-M908-'].Update(M908)
+    window['-M910-'].Update(M910)
+    window['-M911-'].Update(M911)
+    window['-M912-'].Update(M912)
     window.refresh()
     if event == "Exit" or event == sg.WIN_CLOSED:
         break
